@@ -35,7 +35,25 @@ bool BT::add_to_left(int d, int nd, BTNode* root){
     return false;
 
 }
-//bool add_to_right(int d, int nd, BTNode* root);
+bool BT::add_to_right(int d, int nd, BTNode* root){
+     if(root==NULL){
+        return false;
+    }
+    if(root->data == d){
+        BTNode* newNode = new BTNode;
+        newNode->data = nd;
+        root->rightChild = newNode;
+        newNode->parent = root;
+        return true;
+    }
+    else{
+        bool l = add_to_right(d, nd, root->leftChild);
+        bool r = add_to_right(d, nd, root->rightChild);
+        return l | r;
+    }
+    
+    return false;
+}
 
 void BT::printRoot(){
     cout<<root->data<<endl;
