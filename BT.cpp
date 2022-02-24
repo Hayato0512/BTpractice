@@ -6,6 +6,7 @@ BT::BT(int x)
     BTNode* newNode = new BTNode;
     root = newNode;
     root->data = x;
+    elementCount = 1;
 
 
 }
@@ -24,6 +25,7 @@ bool BT::add_to_left(int d, int nd, BTNode* root){
         newNode->data = nd;
         root->leftChild = newNode;
         newNode->parent = root;
+        elementCount++;
         return true;
     }
     else{
@@ -44,6 +46,7 @@ bool BT::add_to_right(int d, int nd, BTNode* root){
         newNode->data = nd;
         root->rightChild = newNode;
         newNode->parent = root;
+        elementCount++;
         return true;
     }
     else{
@@ -73,6 +76,7 @@ void BT::insert(int x,BTNode* root){
         BTNode* newNode = new BTNode;
         root = newNode;
         root->data = x;
+        elementCount++;
         return ;
     }
     else{
@@ -82,6 +86,7 @@ void BT::insert(int x,BTNode* root){
                 newNode->data = x;
                 newNode->parent = root;
                 root->leftChild = newNode;
+                elementCount++;
             }
             else{
                 insert(x, root->leftChild);
@@ -93,10 +98,15 @@ void BT::insert(int x,BTNode* root){
                 newNode->data = x;
                 newNode->parent = root;
                 root->rightChild = newNode;
+                elementCount++;
             }
             else{
             insert(x, root->rightChild);
             }
         }
     }
+}
+
+int BT::getElementCount(){
+    return elementCount;
 }

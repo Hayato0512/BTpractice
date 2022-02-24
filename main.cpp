@@ -26,6 +26,7 @@ int main(){
     //a.add_to_right(1,3,a.root);
    // cout<<a.root->rightChild->data<<endl;
     a.printWholeTree(a.root);
+    a.getElementCount();
 }
 
 //g++ -g -o x main.cpp BT.cpp BTNode.cpp

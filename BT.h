@@ -13,7 +13,9 @@ public:
     void printRoot();
     void printWholeTree(BTNode* root);
     void insert(int x,BTNode* root);
+    int getElementCount();
     BTNode* root;
+    int elementCount;
 private:
     
 };
