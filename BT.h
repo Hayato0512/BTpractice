@@ -16,6 +16,7 @@ public:
     BTNode* root;
     int elementCount;
     int getElementCount();
+    void printHello();
 private:
     
 };

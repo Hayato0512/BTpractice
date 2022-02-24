@@ -110,3 +110,7 @@ void BT::insert(int x,BTNode* root){
 int BT::getElementCount(){
     return elementCount;
 }
+
+void BT::printHello(){
+    cout<<"Hello people take a break;"<<endl;
+}

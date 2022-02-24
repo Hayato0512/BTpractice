@@ -27,6 +27,7 @@ int main(){
    // cout<<a.root->rightChild->data<<endl;
     a.printWholeTree(a.root);
     a.getElementCount();
+    a.printHello();
 }
 
 //g++ -g -o x main.cpp BT.cpp BTNode.cpp
