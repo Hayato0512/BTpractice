@@ -67,3 +67,36 @@ void BT::printWholeTree(BTNode* root){
     cout<<root->data<<endl;
     printWholeTree(root->rightChild);
 }
+
+void BT::insert(int x,BTNode* root){
+    if(root==NULL){
+        BTNode* newNode = new BTNode;
+        root = newNode;
+        root->data = x;
+        return ;
+    }
+    else{
+        if(x<=root->data){
+            if(root->leftChild == NULL){
+                BTNode* newNode = new BTNode;
+                newNode->data = x;
+                newNode->parent = root;
+                root->leftChild = newNode;
+            }
+            else{
+                insert(x, root->leftChild);
+            }
+        }
+        else{
+            if(root->rightChild==NULL){
+                BTNode* newNode = new BTNode;
+                newNode->data = x;
+                newNode->parent = root;
+                root->rightChild = newNode;
+            }
+            else{
+            insert(x, root->rightChild);
+            }
+        }
+    }
+}

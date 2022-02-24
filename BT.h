@@ -12,6 +12,7 @@ public:
     bool add_to_right(int d, int nd, BTNode* root);
     void printRoot();
     void printWholeTree(BTNode* root);
+    void insert(int x,BTNode* root);
     BTNode* root;
 private:
     
