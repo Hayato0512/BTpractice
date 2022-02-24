@@ -58,3 +58,12 @@ bool BT::add_to_right(int d, int nd, BTNode* root){
 void BT::printRoot(){
     cout<<root->data<<endl;
 }
+
+void BT::printWholeTree(BTNode* root){
+    if(root==NULL)
+        return;
+    
+    printWholeTree(root->leftChild);
+    cout<<root->data<<endl;
+    printWholeTree(root->rightChild);
+}
