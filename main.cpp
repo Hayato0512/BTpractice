@@ -8,19 +8,20 @@ int main(){
 
 
     BT a(5) ;
-    a.insert(4, a.root);
-    a.insert(3, a.root);
-    a.insert(2, a.root);
-    a.insert(1, a.root);
+    // a.insert(4, a.root);
+    // a.insert(2, a.root);
+    // a.insert(3, a.root);
+    // a.insert(1, a.root);
+    a.insert(6, a.root);
+    a.insert(7, a.root);
+    a.insert(11, a.root);
+    a.insert(9, a.root);
     
     // a.insert(4, a.root);
 
     // a.insert(3, a.root);
 
-    // a.insert(6, a.root);
-    // a.insert(7, a.root);
-    // a.insert(11, a.root);
-    // a.insert(9, a.root);
+    
 
     //a.printRoot();
     //a.add_to_left(1,2,a.root);
@@ -30,7 +31,7 @@ int main(){
     a.printWholeTree(a.root);
     a.getElementCount();
     a.printHello();
-    a.remove(4, a.root);
+    a.remove(5, a.root);
     a.printWholeTree(a.root);
 }
 

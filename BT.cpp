@@ -142,17 +142,45 @@ void BT::remove(int x, BTNode* root){
         }
 
         else if(root->leftChild!=NULL && root->rightChild==NULL){//if it has only leftChild,
+            cout<<"ok, this guy has only left child"<<endl;
             if(root->parent ==NULL){ //if that is the top of the tree,
+                cout<<"yes yes this is the top"<<endl;
                 root->leftChild->parent = NULL;
+                this->root = root->leftChild;
+                delete root;
+
                 elementCount--;
             }
             else{//if root of sub tree,
+                cout<<"yes this root is a sub tree"<<endl;
                 root->leftChild->parent = root->parent;//root->leftchild is root->parent->leftchild
-                if(root= root->parent->leftChild){ //if root was leftchild, put children as leftchild of his grampa.
+                if(root== root->parent->leftChild){ //if root was leftchild, put children as leftchild of his grampa.
                     root->parent->leftChild = root->leftChild;
                 }
                 else{//if root was right child, put his children as right child.
                     root->parent->rightChild = root->leftChild;
+                }
+                delete root;//delete the node.
+                elementCount--;//elementCount --
+            }
+        }
+        else if(root->leftChild==NULL && root->rightChild!=NULL){//if it has only rightChild,
+            if(root->parent ==NULL){ //if that is the top of the tree,
+                cout<<"yes yes this is the top"<<endl;
+    
+                this->root = root->rightChild;
+                delete root;
+                elementCount--;
+
+            }
+             else{//if root of sub tree,
+                cout<<"yes this root is a sub tree"<<endl;
+                root->rightChild->parent = root->parent;//root->leftchild is root->parent->leftchild
+                if(root== root->parent->leftChild){ //if root was leftchild, put children as leftchild of his grampa.
+                    root->parent->leftChild = root->rightChild;
+                }
+                else{//if root was right child, put his children as right child.
+                    root->parent->rightChild = root->rightChild;
                 }
                 delete root;//delete the node.
                 elementCount--;//elementCount --
