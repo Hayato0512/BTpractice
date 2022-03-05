@@ -19,7 +19,15 @@ public:
     void printHello();
     void remove(int x , BTNode* root);
 private:
-    
+    bool hasOnlyLeftChild(BTNode* root);
+    bool hasOnlyRightChild(BTNode* root);
+    bool isLeaf(BTNode* root);
+    bool isLeftChild(BTNode* root);
+    bool isRightChild(BTNode* root);
+    bool hasBothChild(BTNode* root);
+    bool isTopOfTheTree(BTNode* root);
 };
 
 #endif
+
+

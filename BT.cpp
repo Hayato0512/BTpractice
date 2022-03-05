@@ -117,6 +117,7 @@ void BT::printHello(){
 }
 
 void BT::remove(int x, BTNode* root){
+   
     if(root==NULL){
         return;
     }
@@ -128,8 +129,8 @@ void BT::remove(int x, BTNode* root){
     }
    
     else{
-        if(root->leftChild==NULL && root->rightChild==NULL){//if roof is a leaf,
-            if(root == root->parent->leftChild){
+        if(isLeaf(root)){//if roof is a leaf,
+            if(isLeftChild(root)){
                 root->parent->leftChild = NULL;
             }
             else{
@@ -141,7 +142,7 @@ void BT::remove(int x, BTNode* root){
 
         }
 
-        else if(root->leftChild!=NULL && root->rightChild==NULL){//if it has only leftChild,
+        else if(hasOnlyLeftChild(root)){//if it has only leftChild,
             cout<<"ok, this guy has only left child"<<endl;
             if(root->parent ==NULL){ //if that is the top of the tree,
                 cout<<"yes yes this is the top"<<endl;
@@ -154,7 +155,7 @@ void BT::remove(int x, BTNode* root){
             else{//if root of sub tree,
                 cout<<"yes this root is a sub tree"<<endl;
                 root->leftChild->parent = root->parent;//root->leftchild is root->parent->leftchild
-                if(root== root->parent->leftChild){ //if root was leftchild, put children as leftchild of his grampa.
+                if(isLeftChild(root)){ //if root was leftchild, put children as leftchild of his grampa.
                     root->parent->leftChild = root->leftChild;
                 }
                 else{//if root was right child, put his children as right child.
@@ -164,8 +165,8 @@ void BT::remove(int x, BTNode* root){
                 elementCount--;//elementCount --
             }
         }
-        else if(root->leftChild==NULL && root->rightChild!=NULL){//if it has only rightChild,
-            if(root->parent ==NULL){ //if that is the top of the tree,
+        else if(hasOnlyRightChild(root)){//if it has only rightChild,
+            if(isTopOfTheTree(root)){ //if that is the top of the tree,
                 cout<<"yes yes this is the top"<<endl;
     
                 this->root = root->rightChild;
@@ -176,7 +177,7 @@ void BT::remove(int x, BTNode* root){
              else{//if root of sub tree,
                 cout<<"yes this root is a sub tree"<<endl;
                 root->rightChild->parent = root->parent;//root->leftchild is root->parent->leftchild
-                if(root== root->parent->leftChild){ //if root was leftchild, put children as leftchild of his grampa.
+                if(isLeftChild(root)){ //if root was leftchild, put children as leftchild of his grampa.
                     root->parent->leftChild = root->rightChild;
                 }
                 else{//if root was right child, put his children as right child.
@@ -186,8 +187,59 @@ void BT::remove(int x, BTNode* root){
                 elementCount--;//elementCount --
             }
         }
+        else if(hasBothChild(root) &&isTopOfTheTree(root)){//if has two child and the top of the tree,
+            BTNode* current=NULL;
+          
+            current = root->leftChild;
+            
+            while(current->rightChild!=NULL){
+                current = current->rightChild;
+            }
+            BTNode* tmp = current->parent;
+            if(current->leftChild!=NULL){//if the current has leftchild, (it doesnot have right child becuase we came all the way down acrross rightCHild)
+                current->leftChild->parent = tmp;
+                tmp->rightChild = current->leftChild;
+            }
+            else{//if leaf
+                root->leftChild->parent = current;
+                root->rightChild->parent = current;
+                current->leftChild = root->leftChild;
+                current->rightChild = root->rightChild;
+                this->root = current;
+                tmp->rightChild =NULL;
+                elementCount--;
+                delete root;
+            }
+        }
         
 
         
     }
+}
+
+bool BT::hasOnlyLeftChild(BTNode* root){
+    return (root->leftChild!=NULL && root->rightChild==NULL);
+}
+bool BT::hasOnlyRightChild(BTNode* root){
+    return (root->leftChild==NULL && root->rightChild!=NULL);
+}
+
+bool BT::isLeaf(BTNode* root){
+    return (root->leftChild==NULL && root->rightChild==NULL);
+
+}
+
+ bool BT::isLeftChild(BTNode* root){
+     return (root == root->parent->leftChild);
+ }
+
+ bool BT::isRightChild(BTNode* root){
+     return (root == root->parent->rightChild);
+ }
+
+ bool BT::hasBothChild(BTNode* root){
+    return (root->leftChild!=NULL && root->rightChild!=NULL);
+}
+bool BT::isTopOfTheTree(BTNode* root){
+    return (root->parent ==NULL);
 }
