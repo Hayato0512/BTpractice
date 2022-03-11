@@ -9,6 +9,28 @@ BT::BT(int x)
     elementCount = 1;
 
 
+
+}
+
+BT::BT(BT& oldBT){
+    root = NULL;
+    root = copy_BT(root, oldBT.root);
+    elementCount = oldBT.elementCount;
+}
+
+BTNode* BT::copy_BT(BTNode* newRoot, BTNode* oldRoot){
+
+    if(oldRoot==NULL)
+        return NULL;
+    else{
+        newRoot = new BTNode;
+        newRoot->data = oldRoot->data;
+        newRoot->leftChild = copy_BT(newRoot->leftChild, oldRoot->leftChild);
+        newRoot->rightChild = copy_BT(newRoot->rightChild, oldRoot->rightChild);
+        return newRoot;
+
+    }
+    return NULL;
 }
 
 BT::~BT()
@@ -187,34 +209,123 @@ void BT::remove(int x, BTNode* root){
                 elementCount--;//elementCount --
             }
         }
-        else if(hasBothChild(root) &&isTopOfTheTree(root)){//if has two child and the top of the tree,
+        else{
+             if(isTopOfTheTree(root)){//if has two child and the top of the tree,
             BTNode* current=NULL;
           
-            current = root->leftChild;
-            
+            current = root->leftChild;//currentをleftChildに移す。
+            // で、rightChildがいなくなるまで右に下がっていく。
             while(current->rightChild!=NULL){
                 current = current->rightChild;
             }
             BTNode* tmp = current->parent;
-            if(current->leftChild!=NULL){//if the current has leftchild, (it doesnot have right child becuase we came all the way down acrross rightCHild)
-                current->leftChild->parent = tmp;
-                tmp->rightChild = current->leftChild;
-            }
-            else{//if leaf
-                root->leftChild->parent = current;
-                root->rightChild->parent = current;
-                current->leftChild = root->leftChild;
-                current->rightChild = root->rightChild;
-                this->root = current;
-                tmp->rightChild =NULL;
-                elementCount--;
+            if(hasLeftChild(current)){//if the current has leftchild, (it doesnot have right child becuase we came all the way down acrross rightCHild)
+                connectParentAndLeftChild(tmp,current->leftChild);
+                bringPredecessorToTopAfterConnectLeftChildAndParent(current, root);
                 delete root;
             }
+            else{//if leaf
+                bringPredecessorToTop(current, root, tmp);
+                
+                delete root;
+            }
+            }
+            else if(isNotTopOfTheTree(root)){   
+                BTNode* current = root->leftChild;
+                if(current->rightChild==NULL){//rootのすぐ左がpredesessorの場合。
+                    current->parent = root->parent;
+                    if(isLeftChild(root)){
+                        root->parent->leftChild = current;
+                    }
+                    else{
+                        root->parent->rightChild = current;
+                    }
+                    root->rightChild->parent = current;
+                    current->rightChild = root->rightChild;
+                    delete root;
+                    elementCount--;
+
+
+
+                    cout<<"will develop"<<endl;//this is the case the leftchild is the predecessor
+                }
+                else{//if current has right Child,
+                    while(current->rightChild!=NULL){
+                            current = current->rightChild;
+                    }
+                    //arrived predesessor
+                    if(isLeaf(current)){
+                        BTNode* theOldParent = current->parent;
+                        current->parent = root->parent;
+                        if(isLeftChild(root)){
+                            root->parent->leftChild = current;
+                        }
+                        else{
+                            root->parent->rightChild = current;
+                        }
+                        root->leftChild->parent = current;
+                        root->rightChild->parent = current;
+                        current->leftChild = root->leftChild;
+                        current->rightChild = root->rightChild;
+                        theOldParent->rightChild = nullptr;
+                        delete root;
+                        elementCount--;
+                    }
+                    else if(current->leftChild!=NULL){
+                        current->parent->rightChild = current->leftChild;
+                        current->leftChild->parent = current->parent;
+                        current->parent = root->parent;
+                        if(isLeftChild(root)){
+                            root->parent->leftChild = current;
+                        }
+                        else{
+                            root->parent->rightChild = current;
+                        }
+                        root->leftChild->parent = current;
+                        root->rightChild->parent = current;
+                        current->leftChild = root->leftChild;
+                        current->rightChild = root->rightChild;
+                        delete root;
+                        elementCount--;
+                    }
+
+                }
+            }
+        
         }
         
-
-        
     }
+}
+void BT::bringPredecessorToTopAfterConnectLeftChildAndParent(BTNode* predecessor, BTNode* TopNode){
+    TopNode->leftChild->parent = predecessor;
+    TopNode->rightChild->parent = predecessor; 
+    predecessor->leftChild = TopNode->leftChild;
+    predecessor->rightChild = TopNode->rightChild;
+    predecessor->parent = NULL;
+    this->root = predecessor;
+    //PredecessorParent->rightChild = NULL;
+    elementCount--;
+    
+}
+void BT::bringPredecessorToTop(BTNode* predecessor, BTNode* TopNode, BTNode*PredecessorParent ){
+    TopNode->leftChild->parent = predecessor;
+    TopNode->rightChild->parent = predecessor; 
+    predecessor->leftChild = TopNode->leftChild;
+    predecessor->rightChild = TopNode->rightChild;
+    predecessor->parent = NULL;
+    this->root = predecessor;
+    PredecessorParent->rightChild = NULL;
+    elementCount--;
+    
+}
+void BT::connectParentAndLeftChild(BTNode* ptrToParent, BTNode* ptrToLeftChild){
+    ptrToParent->rightChild = ptrToLeftChild;
+    ptrToLeftChild->parent = ptrToParent;
+    
+}
+
+bool BT::hasLeftChild(BTNode* current){
+    return (current->leftChild!=NULL);
 }
 
 bool BT::hasOnlyLeftChild(BTNode* root){
@@ -242,4 +353,7 @@ bool BT::isLeaf(BTNode* root){
 }
 bool BT::isTopOfTheTree(BTNode* root){
     return (root->parent ==NULL);
+}
+bool BT::isNotTopOfTheTree(BTNode* root){
+    return (root->parent !=NULL);
 }
